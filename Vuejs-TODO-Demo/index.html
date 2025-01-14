@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vue.js TODO App SQL backenddel</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13"></script>
+  <link rel="stylesheet" href="stiluslapom.css" type="text/css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <div id="app" class="todo-container">
+    <h2>TODO App with SQL and Express.js Backend</h2>
+    
+    <div class="input-container">
+      <input type="text" v-model="newTask" placeholder="Add new TODO..." />
+      <button class="add-btn" @click="addTask">Add TODO</button>
+    </div>
+
+    <div v-for="(task, index) in tasks" :key="task.id" class="todo-item">
+      <div v-if="!task.isEditing">{{ task.text }}</div>
+      <div v-else>
+        <input type="text" v-model="task.text" />
+        <button class="edit-btn" @click="saveTask(task)">Save TODO</button>
+      </div>
+
+      <div>
+        <button class="edit-btn" @click="toggleEditMode(task)" v-if="!task.isEditing">Edit TODO</button>
+        <button class="delete-btn" @click="deleteTask(task.id)">Delete TODO</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          newTask: "",
+          tasks: [],
+        };
+      },
+      created() {
+        this.fetchTasks();
+      },
+      methods: {
+        async fetchTasks() {
+          const response = await fetch("http://localhost:3000/todos");
+          this.tasks = await response.json();
+        },
+  
+        async addTask() {
+          if (this.newTask.trim() !== "") {
+            const response = await fetch("http://localhost:3000/todos", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ text: this.newTask }),
+            });
+            const newTask = await response.json();
+            this.tasks.push(newTask);
+            this.newTask = "";
+          }
+        },
+  
+        toggleEditMode(task) {
+          task.isEditing = !task.isEditing;
+        },
+  
+        async saveTask(task) {
+          if (task.text.trim() === "") {
+            alert("The TODO cannot be empty!");
+            return;
+          }
+
+          const response = await fetch(`http://localhost:3000/todos/${task.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: task.text }),
+          });
+          task.isEditing = false;
+        },
+  
+        async deleteTask(id) {
+          const response = await fetch(`http://localhost:3000/todos/${id}`, {
+            method: "DELETE",
+          });
+  
+          if (response.ok) {
+            this.tasks = this.tasks.filter((task) => task.id !== id);
+          } else {
+            alert('An error has occured while deleting a TODO!');
+          }
+        },
+      },
+    }).mount("#app");
+  </script>
+</body>
+</html>

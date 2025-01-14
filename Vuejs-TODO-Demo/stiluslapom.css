@@ -1,0 +1,119 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.todo-container {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  min-width: 300px;
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+.input-container {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9f9f9;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+button {
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button.add-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+button.edit-btn {
+  background-color: #2196f3;
+  color: white;
+}
+
+button.delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Reszponzív média lekérdezések */
+@media (max-width: 768px) {
+  .todo-container {
+    width: 90%;
+    padding: 15px;
+  }
+
+  input[type="text"] {
+    font-size: 16px;
+  }
+
+  .todo-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  button {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+
+  .input-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    margin: 10px;
+  }
+
+  .todo-container {
+    padding: 10px;
+  }
+
+  .todo-item {
+    padding: 8px 12px;
+  }
+
+  button {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+}
